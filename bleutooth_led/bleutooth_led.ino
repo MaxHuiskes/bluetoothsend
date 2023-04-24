@@ -36,7 +36,11 @@ void processCommand() {
   char exit = data[2];
   if (inst == '1') {
     digitalWrite(LIGHT, HIGH);
+    btm.println("2");
   } else if (inst == '2') {
     digitalWrite(LIGHT, LOW);
+    btm.println("2");
+  } else{
+    btm.println("5");
   }
 }
