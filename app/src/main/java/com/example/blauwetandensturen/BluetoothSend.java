@@ -22,7 +22,6 @@ public class BluetoothSend {
 
     public BluetoothSend() {
         bluetoothAdapter= BluetoothAdapter.getDefaultAdapter();
-
     }
 
     @SuppressLint("MissingPermission")
@@ -31,8 +30,6 @@ public class BluetoothSend {
         OutputStream outputStream = socket.getOutputStream();
         // Send the plain text
         outputStream.write(send.getBytes(StandardCharsets.UTF_8));
-        // Close the connection
-        //socket.close();
     }
 
     @SuppressLint("MissingPermission")
