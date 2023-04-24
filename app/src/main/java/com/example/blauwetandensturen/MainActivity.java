@@ -19,15 +19,12 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn;
-    private Button btnb;
+    private Button btn, btnb;
     private ListView list;
     private ArrayAdapter<String> pairedDevicesArrayAdapter;
     private BluetoothSend bluetoothSend = new BluetoothSend();
     private RadioButton on, off;
     private TextView textView;
-    private Handler handler = new Handler();
-    private Timer timer = new Timer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
             if (on.isChecked()) {
                 try {
                     bluetoothSend.send("21");
+                    textView.setText("");
+                    if (bluetoothSend.getBluetooth().contains("2")){
+                    textView.setText("Led is aan");
+                    }
                 } catch (IOException e) {
                     Log.e("IOExeptoin", e.getMessage());
                 }
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
             if (off.isChecked()) {
                 try {
                     bluetoothSend.send("22");
+                    if (bluetoothSend.getBluetooth().contains("2")){
+                        textView.setText("Led is uit");
+                    }
                 } catch (IOException e) {
                     Log.e("IOExeptoin", e.getMessage());
                 }

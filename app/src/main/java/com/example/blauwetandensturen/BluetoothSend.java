@@ -66,6 +66,17 @@ public class BluetoothSend {
         }
     }
 
+    public String getBluetooth() throws IOException{
+        InputStream inputStream = socket.getInputStream();
+
+        byte[] buffer = new byte[1024];
+        int numBytes = inputStream.read(buffer);
+        String receivedText = new String(buffer, 0, numBytes);
+        Log.e("receivedText", receivedText);
+
+        return receivedText;
+    }
+
     @SuppressLint("MissingPermission")
     public void showPairedDevices(ListView pairedDevicesListView, ArrayAdapter<String> pairedDevicesArrayAdapter) {
 
