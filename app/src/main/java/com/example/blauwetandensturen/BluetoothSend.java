@@ -77,7 +77,6 @@ public class BluetoothSend {
     @SuppressLint("MissingPermission")
     public void showPairedDevices(ListView pairedDevicesListView, ArrayAdapter<String> pairedDevicesArrayAdapter) {
 
-        //BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             // Device doesn't support Bluetooth
         } else if (!bluetoothAdapter.isEnabled()) {
@@ -91,12 +90,9 @@ public class BluetoothSend {
                 // Device does not support Bluetooth
                 return;
             }
-
             // Get the list of paired devices
             Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-
             // Create an array adapter for the list view
-
             pairedDevicesListView.setAdapter(pairedDevicesArrayAdapter);
 
             if (pairedDevices.size() > 0) {
