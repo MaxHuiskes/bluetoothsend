@@ -56,9 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
         btn.setOnClickListener(view -> {
             bluetoothSend.showPairedDevices(list, pairedDevicesArrayAdapter);
-            Log.i("jejrkl", "jhejfhkas");
-            sendNotification("yes sir", "does ringtone work");
-
         });
 
         btnc.setOnClickListener(view -> {
@@ -99,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     bluetoothSend.send("23");
                     if (bluetoothSend.getBluetooth().contains("2")){
-                        sendNotification("Ja, led is aan het flippen","Is led aan?");
-                        textView.setText("Ja, led is aan het flippen");
+                        sendNotification("Ja, led is geflipt","Is led aan?");
+                        textView.setText("Ja, led is geflipt");
                     }
                 } catch (IOException e) {
                     Log.e("IOExeptoin", e.getMessage());
