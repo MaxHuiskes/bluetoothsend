@@ -74,6 +74,10 @@ public class BluetoothSend {
         return receivedText;
     }
 
+    public boolean isConnected(){
+        return socket.isConnected();
+    }
+
     @SuppressLint("MissingPermission")
     public void showPairedDevices(ListView pairedDevicesListView, ArrayAdapter<String> pairedDevicesArrayAdapter) {
 

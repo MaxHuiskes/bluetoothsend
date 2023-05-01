@@ -30,12 +30,12 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn, btnb;
+    private Button btn, btnb,btnc;
     private ListView list;
     private ArrayAdapter<String> pairedDevicesArrayAdapter;
     private BluetoothSend bluetoothSend = new BluetoothSend();
     private RadioButton on, off;
-    private TextView textView;
+    private TextView textView, tvStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
 
         btn = findViewById(R.id.button);
         btnb = findViewById(R.id.button2);
+        btnc = findViewById(R.id.button3);
         list = findViewById(R.id.listView);
         textView = findViewById(R.id.textView);
+        tvStatus = findViewById(R.id.textView2);
 
         on = findViewById(R.id.on);
         off = findViewById(R.id.of);
@@ -58,6 +60,16 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        btnc.setOnClickListener(view -> {
+            bluetoothSend.closeConnection();
+            Log.i("jejrkl", "jhejfhkas");
+            sendNotification("No connection closed", "Connection open?");
+            if (!bluetoothSend.isConnected()){
+                tvStatus.setText("Geen idee of led je aan is.\nGeen verbinding.");
+                textView.setText("???");
+            }
+
+        });
         btnb.setOnClickListener(view -> {
             if (on.isChecked()) {
                 try {
@@ -96,7 +108,10 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     Log.e("IOExeptoin", e.getMessage());
                 } finally {
-                    pairedDevicesArrayAdapter.clear();
+                    if (bluetoothSend.isConnected()){
+                        tvStatus.setText("Er is verbinding.");
+                        pairedDevicesArrayAdapter.clear();
+                    }
                 }
             }
         });
