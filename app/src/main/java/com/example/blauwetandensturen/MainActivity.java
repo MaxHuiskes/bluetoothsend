@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             bluetoothSend.showPairedDevices(list, pairedDevicesArrayAdapter);
         });
 
+
         btnc.setOnClickListener(view -> {
             try {
                 if (bluetoothSend.isConnected()) {
