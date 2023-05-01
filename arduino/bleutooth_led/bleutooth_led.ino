@@ -1,11 +1,12 @@
 #include <SoftwareSerial.h>
 #define LIGHT 13
+#define BUZZER 12
 SoftwareSerial btm(2, 3);  // rx tx
 int index = 0;
 char data[10];
 char c;
-bool on = 0;
 int buzz = 0;
+bool on = 0;
 boolean flag = false;
 void setup() {
   pinMode(LIGHT, OUTPUT);
@@ -33,25 +34,32 @@ void loop() {
     index = 0;
     data[0] = '\\0';
   }
+
 }
 void processCommand() {
   char command = data[0];
   char inst = data[1];
   char exit = data[2];
-  if (inst == '3') {
+  if (inst == '3'){
     on = !on;
   }
-  if (inst == '1' || on) {
+  if (inst == '1' || (inst == '3' && on)) {
     digitalWrite(LIGHT, HIGH);
     buzz = 1;
-    on = 1;
     btm.println("2");
-  } else if (inst == '2' || !on) {
+  } else if (inst == '2' || (inst == '3' && !on) ) {
     digitalWrite(LIGHT, LOW);
     buzz = 0;
-    on = 0;
     btm.println("2");
   } else {
     btm.println("5");
+  }
+}
+
+void buzzersound() {
+  if (buzz == 1) {
+    tone(BUZZER, 1000);
+  } else {
+    noTone(BUZZER);
   }
 }
