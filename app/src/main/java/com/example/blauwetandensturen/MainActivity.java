@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     bluetoothSend.send("22");
                     if (bluetoothSend.getBluetooth().contains("2")){
-                        sendNotification("Nee,led is uit","Is led aan?");
+                        sendNotification("Nee, led is uit","Is led aan?");
                         textView.setText("Led is uit");
                     }
                 } catch (IOException e) {
@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
                     bluetoothSend.createConnection(device);
                 } catch (IOException e) {
                     Log.e("IOExeptoin", e.getMessage());
+                } finally {
+                    pairedDevicesArrayAdapter.clear();
                 }
             }
         });
