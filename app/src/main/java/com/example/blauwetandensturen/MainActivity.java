@@ -60,11 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
         btnc.setOnClickListener(view -> {
             try {
-                if (!bluetoothSend.isConnected()) {
+                if (bluetoothSend.isConnected()) {
                     bluetoothSend.closeConnection();
-                    sendNotification("No connection closed", "Connection open?");
-                    tvStatus.setText("Geen idee of led je aan is.\nGeen verbinding.");
-                    textView.setText("???");
+                    if (!bluetoothSend.isConnected()) {
+                        sendNotification("No connection closed", "Connection open?");
+                        tvStatus.setText("Geen idee of led je aan is.\nGeen verbinding.");
+                        textView.setText("???");
+                    }
                 }
             } catch (IOException e ) {
                 Log.e("IOException e", e.getMessage());
