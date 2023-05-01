@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView list;
     private ArrayAdapter<String> pairedDevicesArrayAdapter;
     private BluetoothSend bluetoothSend = new BluetoothSend();
-    private RadioButton on, off;
+    private RadioButton on, off, flip;
     private TextView textView, tvStatus;
 
     @Override
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         on = findViewById(R.id.on);
         off = findViewById(R.id.of);
+        flip = findViewById(R.id.flip);
         pairedDevicesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 
         btn.setOnClickListener(view -> {
@@ -89,6 +90,17 @@ public class MainActivity extends AppCompatActivity {
                     if (bluetoothSend.getBluetooth().contains("2")){
                         sendNotification("Nee, led is uit","Is led aan?");
                         textView.setText("Led is uit");
+                    }
+                } catch (IOException e) {
+                    Log.e("IOExeptoin", e.getMessage());
+                }
+            }
+            if (flip.isChecked()) {
+                try {
+                    bluetoothSend.send("23");
+                    if (bluetoothSend.getBluetooth().contains("2")){
+                        sendNotification("Ja, led is aan het flippen","Is led aan?");
+                        textView.setText("Ja, led is aan het flippen");
                     }
                 } catch (IOException e) {
                     Log.e("IOExeptoin", e.getMessage());
