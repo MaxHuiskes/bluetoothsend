@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
         btnc.setOnClickListener(view -> {
             try {
                 if (bluetoothSend.isConnected()) {
