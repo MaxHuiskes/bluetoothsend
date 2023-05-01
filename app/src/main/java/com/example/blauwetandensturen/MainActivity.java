@@ -59,12 +59,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnc.setOnClickListener(view -> {
-            bluetoothSend.closeConnection();
-            Log.i("jejrkl", "jhejfhkas");
-            sendNotification("No connection closed", "Connection open?");
-            if (!bluetoothSend.isConnected()){
-                tvStatus.setText("Geen idee of led je aan is.\nGeen verbinding.");
-                textView.setText("???");
+            try {
+                if (!bluetoothSend.isConnected()) {
+                    bluetoothSend.closeConnection();
+                    sendNotification("No connection closed", "Connection open?");
+                    tvStatus.setText("Geen idee of led je aan is.\nGeen verbinding.");
+                    textView.setText("???");
+                }
+            } catch (IOException e ) {
+                Log.e("IOException e", e.getMessage());
+            } catch (NullPointerException e){
+                Log.e("NullPointerException e", e.getMessage());
             }
 
         });
@@ -117,9 +122,13 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     Log.e("IOExeptoin", e.getMessage());
                 } finally {
-                    if (bluetoothSend.isConnected()){
-                        tvStatus.setText("Er is verbinding.");
-                        pairedDevicesArrayAdapter.clear();
+                    try {
+                        if (bluetoothSend.isConnected()) {
+                            tvStatus.setText("Er is verbinding.");
+                            pairedDevicesArrayAdapter.clear();
+                        }
+                    } catch (IOException e) {
+                        Log.e("IOException e", e.getMessage());
                     }
                 }
             }

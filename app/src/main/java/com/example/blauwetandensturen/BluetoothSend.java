@@ -74,7 +74,7 @@ public class BluetoothSend {
         return receivedText;
     }
 
-    public boolean isConnected(){
+    public boolean isConnected() throws IOException{
         return socket.isConnected();
     }
 
