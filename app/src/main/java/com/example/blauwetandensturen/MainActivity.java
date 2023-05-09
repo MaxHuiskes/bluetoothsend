@@ -1,6 +1,5 @@
 package com.example.blauwetandensturen;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,7 +9,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,13 +22,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
 import java.io.IOException;
-import java.security.cert.CertPathBuilder;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn, btnb,btnc;
+    private Button btn, btnb, btnc;
     private ListView list;
     private ArrayAdapter<String> pairedDevicesArrayAdapter;
     private BluetoothSend bluetoothSend = new BluetoothSend();
@@ -48,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         list = findViewById(R.id.listView);
         textView = findViewById(R.id.textView);
         tvStatus = findViewById(R.id.textView2);
+
+        hourlyTask();
+        monthlyTask();
 
         on = findViewById(R.id.on);
         off = findViewById(R.id.of);
@@ -71,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
                         textView.setText("???");
                     }
                 }
-            } catch (IOException e ) {
+            } catch (IOException e) {
                 Log.e("IOException e", e.getMessage());
-            } catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 Log.e("NullPointerException e", e.getMessage());
             }
 
@@ -83,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     bluetoothSend.send("21");
                     textView.setText("");
-                    if (bluetoothSend.getBluetooth().contains("2")){
-                        sendNotification("Ja, led is aan","Is led aan?");
-                    textView.setText("Led is aan");
+                    if (bluetoothSend.getBluetooth().contains("2")) {
+                        sendNotification("Ja, led is aan", "Is led aan?");
+                        textView.setText("Led is aan");
                     }
                 } catch (IOException e) {
                     Log.e("IOExeptoin", e.getMessage());
@@ -94,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
             if (off.isChecked()) {
                 try {
                     bluetoothSend.send("22");
-                    if (bluetoothSend.getBluetooth().contains("2")){
-                        sendNotification("Nee, led is uit","Is led aan?");
+                    if (bluetoothSend.getBluetooth().contains("2")) {
+                        sendNotification("Nee, led is uit", "Is led aan?");
                         textView.setText("Led is uit");
                     }
                 } catch (IOException e) {
@@ -105,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
             if (flip.isChecked()) {
                 try {
                     bluetoothSend.send("23");
-                    if (bluetoothSend.getBluetooth().contains("2")){
-                        sendNotification("Ja, led is aan het flippen","Is led aan?");
+                    if (bluetoothSend.getBluetooth().contains("2")) {
+                        sendNotification("Ja, led is aan het flippen", "Is led aan?");
                         textView.setText("Ja, led is aan het flippen");
                     }
                 } catch (IOException e) {
@@ -140,9 +147,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void sendNotification (String message, String title ){
+    public void sendNotification(String message, String title) {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_IMMUTABLE);
 
         String channelId = "some_channel_id";
@@ -153,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle(title)
                         .setContentText(message)
                         .setAutoCancel(true)
-                        .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+                        .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
 
@@ -171,6 +178,66 @@ public class MainActivity extends AppCompatActivity {
 
         assert notificationManager != null;
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    public void hourlyTask() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                sendNotification("Je moet draaien!", "Het is weer tijd!");
+            }
+        }, 0, 1, TimeUnit.HOURS); // TimeUnit.HOURS als je de het per uur wilt doen
+    }
+
+    public void monthlyTask() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        // Get the current date and time
+        LocalDateTime now = LocalDateTime.now();
+
+        // Calculate the delay until the next month
+        LocalDateTime nextMonth = now.plusMonths(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        Duration duration = Duration.between(now, nextMonth);
+        long initialDelay = duration.getSeconds();
+
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                DateFormat dateFormat = new SimpleDateFormat("MM");
+                Date date = new Date();
+                Log.d("Month",dateFormat.format(date));
+                String mon = "";
+                if (date.toString() == "12"){
+                    mon = "DEC";
+                } else if( date.toString() == "01"){
+                    mon = "JAN";
+                } else if( date.toString() == "02"){
+                    mon = "FEB";
+                } else if( date.toString() == "03"){
+                    mon = "MAR";
+                } else if( date.toString() == "04"){
+                     mon = "APR";
+                } else if( date.toString() == "05"){
+                    mon = "MAY";
+                } else if( date.toString() == "06"){
+                    mon = "JUN";
+                } else if( date.toString() == "07"){
+                    mon = "JUL";
+                } else if( date.toString() == "08"){
+                    mon = "AUG";
+                } else if( date.toString() == "09"){
+                    mon = "SEP";
+                } else if( date.toString() == "10"){
+                    mon = "OCT";
+                } else if( date.toString() == "11"){
+                    mon = "NOV";
+                }
+                String url = "url" + mon ;
+
+            }
+        }, initialDelay, 30, TimeUnit.DAYS);
     }
 
 }
