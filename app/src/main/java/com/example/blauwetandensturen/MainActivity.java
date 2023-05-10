@@ -1,5 +1,6 @@
 package com.example.blauwetandensturen;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -37,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
     private Button btn, btnb, btnc;
     private ListView list;
     private ArrayAdapter<String> pairedDevicesArrayAdapter;
-    private BluetoothSend bluetoothSend = new BluetoothSend();
+    private final BluetoothSend bluetoothSend = new BluetoothSend();
     private RadioButton on, off, flip;
     private TextView textView, tvStatus;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String send;
@@ -147,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     public void sendNotification(String message, String title) {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
@@ -205,33 +209,33 @@ public class MainActivity extends AppCompatActivity {
         scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                DateFormat dateFormat = new SimpleDateFormat("MM");
+                @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("MM");
                 Date date = new Date();
                 Log.d("Month",dateFormat.format(date));
                 String mon = "";
-                if (date.toString() == "12"){
+                if (date.toString().equals("12")){
                     mon = "DEC";
-                } else if( date.toString() == "01"){
+                } else if(date.toString().equals("01")){
                     mon = "JAN";
-                } else if( date.toString() == "02"){
+                } else if(date.toString().equals("02")){
                     mon = "FEB";
-                } else if( date.toString() == "03"){
+                } else if(date.toString().equals("03")){
                     mon = "MAR";
-                } else if( date.toString() == "04"){
+                } else if(date.toString().equals("04")){
                      mon = "APR";
-                } else if( date.toString() == "05"){
+                } else if(date.toString().equals("05")){
                     mon = "MAY";
-                } else if( date.toString() == "06"){
+                } else if(date.toString().equals("06")){
                     mon = "JUN";
-                } else if( date.toString() == "07"){
+                } else if(date.toString().equals("07")){
                     mon = "JUL";
-                } else if( date.toString() == "08"){
+                } else if(date.toString().equals("08")){
                     mon = "AUG";
-                } else if( date.toString() == "09"){
+                } else if(date.toString().equals("09")){
                     mon = "SEP";
-                } else if( date.toString() == "10"){
+                } else if(date.toString().equals("10")){
                     mon = "OCT";
-                } else if( date.toString() == "11"){
+                } else if(date.toString().equals("11")){
                     mon = "NOV";
                 }
                 String url = "url" + mon ;
