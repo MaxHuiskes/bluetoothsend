@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -26,7 +27,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.concurrent.Executors;
@@ -35,10 +35,10 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final BluetoothSend bluetoothSend = new BluetoothSend();
     private Button btn, btnb, btnc;
     private ListView list;
     private ArrayAdapter<String> pairedDevicesArrayAdapter;
-    private final BluetoothSend bluetoothSend = new BluetoothSend();
     private RadioButton on, off, flip;
     private TextView textView, tvStatus;
 
@@ -87,6 +87,25 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+
+        Thread getData = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (bluetoothSend.isConnected()) {
+                        String recieve = bluetoothSend.getBluetoothw();
+                        Toast.makeText(MainActivity.this, recieve, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IOException e) {
+                    Log.e("IOException", e.getMessage());
+                } catch (NullPointerException e){
+                    Log.e("NullPointerException", e.getMessage());
+                }
+            }
+        });
+        getData.start();
+
         btnb.setOnClickListener(view -> {
             if (on.isChecked()) {
                 try {
@@ -184,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
+
     public void hourlyTask() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -192,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 sendNotification("Je moet draaien!", "Het is weer tijd!");
             }
-        }, 0, 1, TimeUnit.HOURS); // TimeUnit.HOURS als je de het per uur wilt doen
+        }, 0, 1, TimeUnit.SECONDS); // TimeUnit.HOURS als je de het per uur wilt doen
     }
 
     public void monthlyTask() {
@@ -211,37 +231,36 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("MM");
                 Date date = new Date();
-                Log.d("Month",dateFormat.format(date));
+                Log.d("Month", dateFormat.format(date));
                 String mon = "";
-                if (date.toString().equals("12")){
+                if (date.toString().equals("12")) {
                     mon = "DEC";
-                } else if(date.toString().equals("01")){
+                } else if (date.toString().equals("01")) {
                     mon = "JAN";
-                } else if(date.toString().equals("02")){
+                } else if (date.toString().equals("02")) {
                     mon = "FEB";
-                } else if(date.toString().equals("03")){
+                } else if (date.toString().equals("03")) {
                     mon = "MAR";
-                } else if(date.toString().equals("04")){
-                     mon = "APR";
-                } else if(date.toString().equals("05")){
+                } else if (date.toString().equals("04")) {
+                    mon = "APR";
+                } else if (date.toString().equals("05")) {
                     mon = "MAY";
-                } else if(date.toString().equals("06")){
+                } else if (date.toString().equals("06")) {
                     mon = "JUN";
-                } else if(date.toString().equals("07")){
+                } else if (date.toString().equals("07")) {
                     mon = "JUL";
-                } else if(date.toString().equals("08")){
+                } else if (date.toString().equals("08")) {
                     mon = "AUG";
-                } else if(date.toString().equals("09")){
+                } else if (date.toString().equals("09")) {
                     mon = "SEP";
-                } else if(date.toString().equals("10")){
+                } else if (date.toString().equals("10")) {
                     mon = "OCT";
-                } else if(date.toString().equals("11")){
+                } else if (date.toString().equals("11")) {
                     mon = "NOV";
                 }
-                String url = "url" + mon ;
+                String url = "url" + mon;
 
             }
         }, initialDelay, 30, TimeUnit.DAYS);
     }
-
 }
