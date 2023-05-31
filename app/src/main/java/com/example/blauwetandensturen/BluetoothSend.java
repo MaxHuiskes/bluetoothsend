@@ -73,7 +73,8 @@ public class BluetoothSend {
             receivedText = new String(buffer, 0, numBytes);
             Log.e("receivedText", receivedText);
             if(!receivedText.isEmpty()){
-                Toast.makeText(MainActivity.this, recieve, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, receivedText, Toast.LENGTH_SHORT).show();
+                receivedText.clear();
             }
         }
         return receivedText;
