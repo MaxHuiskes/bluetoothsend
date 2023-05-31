@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
+import android.widget.Toast;
 
 public class BluetoothSend {
 
@@ -71,6 +72,9 @@ public class BluetoothSend {
             int numBytes = inputStream.read(buffer);
             receivedText = new String(buffer, 0, numBytes);
             Log.e("receivedText", receivedText);
+            if(!receivedText.isEmpty()){
+                Toast.makeText(MainActivity.this, recieve, Toast.LENGTH_SHORT).show();
+            }
         }
         return receivedText;
     }
