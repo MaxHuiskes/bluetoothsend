@@ -65,6 +65,7 @@ public class BluetoothSend {
     }
 
     public String getBluetoothw() throws IOException {
+        while(socket.isConnected()){
         InputStream inputStream = socket.getInputStream();
         String receivedText = "";
         byte[] buffer = new byte[1024];
@@ -74,10 +75,12 @@ public class BluetoothSend {
             Log.e("receivedText", receivedText);
             if(!receivedText.isEmpty()){
                 Toast.makeText(MainActivity.this, receivedText, Toast.LENGTH_SHORT).show();
-                receivedText.clear();
+                receivedText = "";
             }
         }
         return receivedText;
+        }
+        return "0";
     }
 
     public String getBluetooth() throws IOException{
