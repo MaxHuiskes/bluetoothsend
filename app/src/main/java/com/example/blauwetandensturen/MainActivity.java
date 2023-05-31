@@ -95,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     if (bluetoothSend.isConnected()) {
-                        String recieve = bluetoothSend.getBluetoothw();
-                        Toast.makeText(MainActivity.this, recieve, Toast.LENGTH_SHORT).show();
+                        bluetoothSend.getBluetoothw();
                     }
                 } catch (IOException e) {
                     Log.e("IOException", e.getMessage());
